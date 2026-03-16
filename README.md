@@ -1,50 +1,78 @@
 # MatchingMakingService
 
-[1] Website Service
-  - Simple Login Screen
-  - Profile
-    - Displays Stats
-  - Shop
-  - Queue Button
-    - Game Options (Competitive)
-  - Leaderboard
-  - Ranking System
+## Overview
+This project is composed of three main services:
 
-[2.1] Matchmaking Service
-  - Pool of Data
-    - Kafka Service to Manage Pools
-  - Websocket Connection
-    - To establish a queue to show who is in the queue.
-      - Figure out an algorithm
-        - Based on Rank
-        - 10 People
-    - Connection to our server and spin up a server.
-      - Once done send an ip to distribute
+1. **Website Service**
+2. **Matchmaking Service**
+3. **Game Service**
 
-[2.2] Matchmaking Service
-  - Close service with the ip
-  - Once clicking accept run command to join IP Address - Create script for each game.
+It also targets support for multiple games (listed below).
 
-[3] Game Service
-  - Create plugin to connect to our databases for realtime match data.
+---
 
+## 1) Website Service
+Planned features:
 
+- **Authentication**
+  - Simple login screen
+- **Profile**
+  - Display player stats
+- **Shop**
+- **Queue**
+  - Queue button
+  - Game options (e.g., *Competitive*)
+- **Leaderboard**
+- **Ranking system**
 
-[X] Games
-  - CS2
-  - League of Legends
-  - Valorant
-  - Overwatch
-  [Questionables]
-    - TFT
-    - Dota 2
-    - Deadlock
-    - Brawl Stars
-    - Clash Royale
-    - Madden
-    - FC
-    - 2K
-    - The Show
-    - Fall Guys
-  [LAST]
-    - Minecraft (Hunger Games)
+---
+
+## 2) Matchmaking Service
+
+### 2.1 Queue + Match Setup
+- **Player pool management**
+  - Pool of data
+  - Kafka service to manage pools
+- **WebSocket connection**
+  - Establish a queue and show who is currently queued
+- **Match algorithm**
+  - Rank-based
+  - Groups of **10 players**
+- **Server provisioning**
+  - Connect to our server and spin up a game server
+  - Once ready, send an IP to distribute to players
+
+### 2.2 Accept + Join Flow
+- Close service with the IP
+- On **Accept**, run a command/script to join the IP address
+  - Create a join script for each game
+
+---
+
+## 3) Game Service
+- Create a plugin to connect to our databases for real-time match data
+
+---
+
+## Games
+
+### Target Games
+- CS2
+- League of Legends
+- Valorant
+- Overwatch
+
+### Questionable / Maybe
+- TFT
+- Dota 2
+- Deadlock
+- Brawl Stars
+- Clash Royale
+- Madden
+- FC
+- 2K
+- The Show
+- Fall Guys
+
+### Last Priority
+- Minecraft (Hunger Games)
