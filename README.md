@@ -21,7 +21,7 @@ Planned features:
 - **Shop**
 - **Queue**
   - Queue button
-  - Game options (e.g., *Competitive*)
+  - Game options (e.g., *CS2*, *League of Legends*)
 - **Leaderboard**
 - **Ranking system**
 
