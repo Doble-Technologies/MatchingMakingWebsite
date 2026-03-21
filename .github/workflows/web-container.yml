@@ -10,12 +10,12 @@ on:
       - synchronize
       - ready_for_review
     paths:
-      - web/**
+      - /**
   push:
     branches:
       - main
     paths:
-      - web/**
+      - /**
 jobs:
   determine-workflow:
     runs-on: 'ubuntu-latest'
@@ -49,7 +49,7 @@ jobs:
         id: version
         shell: bash
         run: |
-          version=$(jq -r '.version' web/package.json)
+          version=$(jq -r '.version' package.json)
           echo "current_version=$version" >> "$GITHUB_OUTPUT"
   nonprod-deploy:
     needs: determine-workflow
