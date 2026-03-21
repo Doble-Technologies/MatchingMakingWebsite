@@ -90,7 +90,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Docker Build Backend
-        run: docker build -f web/Dockerfile -t john4064/matchmaking:prod_web ./web --build-arg ENVIRONMENT=prod
+        run: docker build -f Dockerfile -t john4064/matchmaking:prod_web ./web --build-arg ENVIRONMENT=prod
       - name: Docker Push Backend
         run: docker push john4064/matchmaking:prod_web
   # deploy:
