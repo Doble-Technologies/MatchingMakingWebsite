@@ -33,30 +33,6 @@ jobs:
     steps:
       - name: Check secrets present
         run: |
-          if [[ -z "${{ secrets.TEAMCITY_WEB_ID }}" ]]; then
-            echo "TEAMCITY_WEB_ID secret is empty or missing"
-            exit 1
-          else
-            echo "TEAMCITY_WEB_ID secret is set"
-          fi
-          if [[ -z "${{ secrets.TEAMCITY_URL }}" ]]; then
-            echo "TEAMCITY_URL secret is empty or missing"
-            exit 1
-          else
-            echo "TEAMCITY_URL secret is set"
-          fi
-          if [[ -z "${{ secrets.TEAMCITY_USERNAME }}" ]]; then
-            echo "TEAMCITY_USERNAME secret is empty or missing"
-            exit 1
-          else
-            echo "TEAMCITY_USERNAME secret is set"
-          fi
-          if [[ -z "${{ secrets.TEAMCITY_PASSWORD }}" ]]; then
-            echo "TEAMCITY_PASSWORD secret is empty or missing"
-            exit 1
-          else
-            echo "TEAMCITY_PASSWORD secret is set"
-          fi
           if [[ -z "${{ secrets.DOCKERHUB_USER }}" ]]; then
             echo "DOCKERHUB_USER secret is empty or missing"
             exit 1
