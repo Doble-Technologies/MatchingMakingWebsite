@@ -1,0 +1,111 @@
+name: Web Deployment Production
+on:
+  workflow_call:
+    inputs:
+      environments:
+        type: string
+        description: An optional list of environments to deploy to.
+        default: 'prod'
+      workflow_type:
+        type: string
+        description: An optional string for workflow types.
+        default: 'prod'
+      branch:
+        type: string
+        description: An optional string to define which branch to checkout.
+        default: 'main'
+      current_version:
+        type: string
+        description: Current Version of the package.json.
+        default: '0.0.0'
+    secrets:
+      DOCKERHUB_USER: {}
+      DOCKERHUB_TOKEN: {}
+      TEST: {}
+      TEAMCITY_WEB_ID: {}
+      TEAMCITY_URL: {}
+      TEAMCITY_USERNAME: {}
+      TEAMCITY_PASSWORD: {}
+jobs:
+  check-inputs:
+    runs-on: 'ubuntu-latest'
+    environment: ${{ inputs.environments }}
+    steps:
+      - name: Check secrets present
+        run: |
+          if [[ -z "${{ secrets.TEAMCITY_WEB_ID }}" ]]; then
+            echo "TEAMCITY_WEB_ID secret is empty or missing"
+            exit 1
+          else
+            echo "TEAMCITY_WEB_ID secret is set"
+          fi
+          if [[ -z "${{ secrets.TEAMCITY_URL }}" ]]; then
+            echo "TEAMCITY_URL secret is empty or missing"
+            exit 1
+          else
+            echo "TEAMCITY_URL secret is set"
+          fi
+          if [[ -z "${{ secrets.TEAMCITY_USERNAME }}" ]]; then
+            echo "TEAMCITY_USERNAME secret is empty or missing"
+            exit 1
+          else
+            echo "TEAMCITY_USERNAME secret is set"
+          fi
+          if [[ -z "${{ secrets.TEAMCITY_PASSWORD }}" ]]; then
+            echo "TEAMCITY_PASSWORD secret is empty or missing"
+            exit 1
+          else
+            echo "TEAMCITY_PASSWORD secret is set"
+          fi
+          if [[ -z "${{ secrets.DOCKERHUB_USER }}" ]]; then
+            echo "DOCKERHUB_USER secret is empty or missing"
+            exit 1
+          else
+            echo "DOCKERHUB_USER secret is set"
+          fi
+          if [[ -z "${{ secrets.DOCKERHUB_TOKEN }}" ]]; then
+            echo "DOCKERHUB_TOKEN secret is empty or missing"
+            exit 1
+          else
+            echo "DOCKERHUB_TOKEN secret is set"
+          fi
+          echo "Current Version: ${{inputs.current_version}}"
+  build:
+    needs: check-inputs
+    if: needs.check-inputs.result == 'success' && inputs.workflow_type == 'release'
+    environment: ${{ inputs.environments }}
+    runs-on: 'ubuntu-latest'
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Branch Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+      - name: Login to Docker
+        uses: docker/login-action@v3
+        with:
+          registry: docker.io
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Docker Build Backend
+        run: docker build -f web/Dockerfile -t john4064/matchmaking:prod_web ./web --build-arg ENVIRONMENT=prod
+      - name: Docker Push Backend
+        run: docker push john4064/matchmaking:prod_web
+  # deploy:
+  #   needs: build
+  #   if: needs.build.result == 'success' && inputs.workflow_type == 'release'
+  #   environment: ${{ inputs.environments }}
+  #   runs-on: 'ubuntu-latest'
+  #   permissions:
+  #     contents: read
+  #     packages: write
+  #   steps:
+  #     - name: Deploy to Team City
+  #       run: |
+  #         curl -u ${{ secrets.TEAMCITY_USERNAME }}:${{ secrets.TEAMCITY_PASSWORD }} \
+  #              -X POST \
+  #              -H "Content-Type: application/json" \
+  #              -d '{"buildType": {"id": "${{ secrets.TEAMCITY_WEB_ID }}"}}' \
+  #              "${{ secrets.TEAMCITY_URL }}/httpAuth/app/rest/buildQueue" > /dev/null
