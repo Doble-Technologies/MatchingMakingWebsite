@@ -50,7 +50,7 @@ jobs:
     needs: check-inputs
     if: needs.check-inputs.result == 'success' && inputs.workflow_type == 'release'
     environment: ${{ inputs.environments }}
-    runs-on: 'ubuntu-latest'
+    runs-on: 'nas'
     permissions:
       contents: read
       packages: write
