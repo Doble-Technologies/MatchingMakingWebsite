@@ -18,7 +18,7 @@ on:
       - '**'
 jobs:
   determine-workflow:
-    runs-on: 'ubuntu-latest'
+    runs-on: 'nas'
     outputs:
       workflow_type: ${{ steps.workflow.outputs.workflow_type }}
       workflow_envs: ${{ steps.workflow.outputs.workflow_envs }}
