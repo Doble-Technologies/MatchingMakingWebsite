@@ -28,7 +28,7 @@ on:
       TEAMCITY_PASSWORD: {}
 jobs:
   check-inputs:
-    runs-on: 'ubuntu-latest'
+    runs-on: 'nas'
     environment: ${{ inputs.environments }}
     steps:
       - name: Check secrets present
