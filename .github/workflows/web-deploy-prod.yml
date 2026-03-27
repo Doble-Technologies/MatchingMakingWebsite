@@ -66,9 +66,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Docker Build Backend
-        run: docker build -f Dockerfile -t john4064/matchmaking:prod_web ./ --build-arg ENVIRONMENT=prod
+        run: docker build -f Dockerfile -t doble/matchmaking:prod_web ./ --build-arg ENVIRONMENT=prod
       - name: Docker Push Backend
-        run: docker push john4064/matchmaking:prod_web
+        run: docker push git.rcslabs.dev/doble/matchmaking:prod_web
   # deploy:
   #   needs: build
   #   if: needs.build.result == 'success' && inputs.workflow_type == 'release'
