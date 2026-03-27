@@ -4,6 +4,7 @@ export const theme = {
     surface: '#1e2d3d',
     surface2: '#263749',
     surface3: '#2d4057',
+    surfaceDeep: '#1a2636',
     border: '#ffffff18',
     border2: '#ffffff25',
     accent: '#60a5fa',

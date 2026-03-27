@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import {
   Home,
+  Login,
   Profile
 } from './pages';
 import {
@@ -87,7 +88,7 @@ export default function App() {
       <Routes>
         <Route
           path="/login"
-          element={<Home />}
+          element={<Login />}
         />
         <Route element={<AppLayout notifications={notifications} />}>
           <Route
