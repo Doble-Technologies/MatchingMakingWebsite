@@ -52,6 +52,7 @@ jobs:
           version=$(jq -r '.version' package.json)
           echo "current_version=$version" >> "$GITHUB_OUTPUT"
   nonprod-deploy:
+    runs-on: 'nas'
     needs: determine-workflow
     if: needs.determine-workflow.outputs.workflow_type != 'release' && github.event.pull_request.user.login != 'renovate-bot'
     strategy:
@@ -76,6 +77,7 @@ jobs:
       contents: read
       packages: write
   prod-deploy:
+    runs-on: 'nas'
     needs: determine-workflow
     if: needs.determine-workflow.outputs.workflow_type == 'release'
     strategy:
