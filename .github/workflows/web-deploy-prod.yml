@@ -56,19 +56,19 @@ jobs:
       packages: write
     steps:
       - name: Branch Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ inputs.branch }}
       - name: Login to Docker
         uses: docker/login-action@v4
         with:
-          registry: docker.io
+          registry: registry.rcslabs.dev
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Docker Build Backend
-        run: docker build -f Dockerfile -t john4064/matchmaking:prod_web ./ --build-arg ENVIRONMENT=prod
+        run: docker build -f Dockerfile -t registry.rcslabs.dev/doble/matchmaking:prod_web ./ --build-arg ENVIRONMENT=prod
       - name: Docker Push Backend
-        run: docker push john4064/matchmaking:prod_web
+        run: docker push registry.rcslabs.dev/doble/matchmaking:prod_web
   # deploy:
   #   needs: build
   #   if: needs.build.result == 'success' && inputs.workflow_type == 'release'
