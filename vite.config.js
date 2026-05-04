@@ -15,6 +15,11 @@ export default defineConfig({
     cors: true,
     hmr: true
   },
+  preview: {
+    host: true,
+    allowedHosts: true,
+    cors: true,
+  },
   optimizeDeps: {
     include: ['react', 'react-dom'],
   },
