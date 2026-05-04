@@ -18,14 +18,6 @@ on:
         type: string
         description: Current Version of the package.json.
         default: '0.0.0'
-    secrets:
-      DOCKERHUB_USER: {}
-      DOCKERHUB_TOKEN: {}
-      TEST: {}
-      TEAMCITY_WEB_ID: {}
-      TEAMCITY_URL: {}
-      TEAMCITY_USERNAME: {}
-      TEAMCITY_PASSWORD: {}
 jobs:
   check-inputs:
     runs-on: 'nas'
@@ -69,19 +61,21 @@ jobs:
         run: docker build -f Dockerfile -t registry.rcslabs.dev/doble/matchmaking:latest_web ./ --build-arg ENVIRONMENT=dev
       - name: Docker Push Backend
         run: docker push registry.rcslabs.dev/doble/matchmaking:latest_web
-  # deploy:
-  #   needs: build
-  #   if: needs.build.result == 'success' && inputs.workflow_type != 'release'
-  #   environment: ${{ inputs.environments }}
-  #   runs-on: 'ubuntu-latest'
-  #   permissions:
-  #     contents: read
-  #     packages: write
-  #   steps:
-  #     - name: Deploy to Team City
-  #       run: |
-  #         curl -u ${{ secrets.TEAMCITY_USERNAME }}:${{ secrets.TEAMCITY_PASSWORD }} \
-  #              -X POST \
-  #              -H "Content-Type: application/json" \
-  #              -d '{"buildType": {"id": "${{ secrets.TEAMCITY_WEB_ID }}"}}' \
-  #              "${{ secrets.TEAMCITY_URL }}/httpAuth/app/rest/buildQueue" > /dev/null
+  deploy:
+   needs: build
+   if: needs.build.result == 'success' && inputs.workflow_type != 'release'
+   environment: ${{ inputs.environments }}
+   runs-on: 'nas'
+   permissions:
+     contents: read
+     packages: write
+   steps:
+     - name: Deploy to Team City Dev
+       run: |
+         echo ${{ secrets.TEAMCITY_URL }}
+         curl -s -X POST \
+           "${{ secrets.TEAMCITY_URL }}/app/rest/buildQueue" \
+           -H "Authorization: Bearer ${{ secrets.TEAMCITY_TOKEN }}" \
+           -H "Content-Type: application/xml" \
+           -H "Accept: application/json" \
+           -d '<build><buildType id="MatchMaking_UI_Build_DEV"/></build>'
