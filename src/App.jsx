@@ -5,6 +5,7 @@ import {
   Profile
 } from './pages';
 import {
+  Footer,
   NavBar
 } from './components';
 import { Global, css } from '@emotion/react'
@@ -68,6 +69,7 @@ const AppLayout = ({ notifications }) => {
       <main>
         <Outlet />
       </main>
+      <Footer />
     </div>
   )
 };
