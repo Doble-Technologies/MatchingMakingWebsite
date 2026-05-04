@@ -58,7 +58,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Docker Build Backend
-        run: docker build -f Dockerfile -t registry.rcslabs.dev/doble/matchmaking:prod_web ./ --build-arg ENVIRONMENT=prod
+        run: docker build -q -f Dockerfile -t registry.rcslabs.dev/doble/matchmaking:prod_web ./ --build-arg ENVIRONMENT=prod
       - name: Docker Push Backend
         run: docker push registry.rcslabs.dev/doble/matchmaking:prod_web
   # deploy:
