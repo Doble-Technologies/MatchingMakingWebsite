@@ -70,7 +70,7 @@ jobs:
      contents: read
      packages: write
    steps:
-     - name: Deploy to Team City
+     - name: Deploy to Team City Dev
        run: |
          echo ${{ secrets.TEAMCITY_URL }}
          curl -s -X POST \
