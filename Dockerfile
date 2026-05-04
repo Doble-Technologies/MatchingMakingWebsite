@@ -24,6 +24,6 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/vite.config.js ./
 
-EXPOSE 6173
+EXPOSE 5174
 
-CMD ["npx", "vite", "preview", "--host", "--port", "4173"]
+CMD ["npx", "vite", "preview", "--host", "--port", "5174"]
