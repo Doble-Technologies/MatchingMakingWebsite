@@ -9,7 +9,17 @@ export default defineConfig({
       jsxImportSource: '@emotion/react'
     })
   ],
+  server:{
+    host: true,
+    allowedHosts: true,
+    cors: true,
+    hmr: true
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom'],
+  },
   resolve: {
+    dedupe: ['react', 'react-dom'],
     alias: {
       '@src': path.resolve(__dirname, './src'),
     }
