@@ -1,4 +1,5 @@
-FROM node:20-alpine
+# --- Build stage ---
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -8,9 +9,21 @@ RUN npm ci
 
 COPY . ./
 
-EXPOSE 5173
-
 ARG ENVIRONMENT
-ENV ENVIRONMENT ${ENVIRONMENT}
+ENV ENVIRONMENT=${ENVIRONMENT}
 
-CMD npm run prod
+RUN npm run build
+
+# --- Serve stage ---
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/vite.config.js ./
+
+EXPOSE 4173
+
+CMD ["npx", "vite", "preview", "--host", "--port", "4173"]
