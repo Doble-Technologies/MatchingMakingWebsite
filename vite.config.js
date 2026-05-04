@@ -11,7 +11,7 @@ export default defineConfig({
   ],
   server:{
     host: true,
-    allowedHosts: true,
+    allowedHosts: "mm-dev.rcslabs.dev",
     cors: true,
     hmr: true
   },
