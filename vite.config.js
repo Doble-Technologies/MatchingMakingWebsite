@@ -9,16 +9,20 @@ export default defineConfig({
       jsxImportSource: '@emotion/react'
     })
   ],
-  server:{
-    host: true,
-    allowedHosts: true,
+  server: {
+    host: '0.0.0.0',
+    port: 5173,
+    allowedHosts: ['mm-dev.rcslabs.dev', '.rcslabs.dev'],
     cors: true,
-    hmr: true
+    hmr: {
+      host: 'mm-dev.rcslabs.dev',
+      clientPort: 443,
+      protocol: 'wss',
+    },
   },
   preview: {
-    host: true,
-    allowedHosts: true,
-    cors: true,
+    host: '0.0.0.0',
+    allowedHosts: ['mm-dev.rcslabs.dev', '.rcslabs.dev'],
   },
   optimizeDeps: {
     include: ['react', 'react-dom'],
