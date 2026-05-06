@@ -11,8 +11,7 @@ const Wrapper = styled('nav')({
   background: theme.colors.surface,
   borderTop: `1px solid ${theme.colors.border}`,
   fontFamily: theme.fonts.head,
-  position: 'fixed',
-  bottom: 0
+  flexShrink: 0
 });
 
 const Text = styled('p')({

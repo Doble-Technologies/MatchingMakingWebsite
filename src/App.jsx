@@ -65,9 +65,9 @@ const notifications = [
 
 const AppLayout = ({ notifications }) => {
   return (
-    <div>
+    <div css={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <NavBar notifications={notifications} />
-      <main>
+      <main css={{ flex: 1, minHeight: 0 }}>
         <Outlet />
       </main>
       <Footer />
