@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Outlet, Route, Routes, useLocation } from 'react-router-dom';
+import { Global, css } from '@emotion/react';
 import {
   Home,
   Profile
@@ -8,7 +9,7 @@ import {
   Footer,
   NavBar
 } from './components/Shell';
-import { Global, css } from '@emotion/react'
+import { config } from './config';
 
 const globalStyles = css`
   @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
@@ -76,6 +77,10 @@ const AppLayout = ({ notifications }) => {
 
 export default function App() {
   const location = useLocation();
+
+  useEffect(() => {
+    const eventSource = new EventSource(`${config.api_url}/queue`)
+  }, [])
   
   // Update document title based on current route
   useEffect(() => {
