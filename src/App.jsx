@@ -79,7 +79,9 @@ export default function App() {
   const location = useLocation();
 
   useEffect(() => {
-    const eventSource = new EventSource(`${config.api_url}/queue`)
+    const eventSource = new EventSource(`${config.api_url}/queue`);
+    console.log('config: ', config.api_url);
+    console.log('eventSource: ', eventSource);
   }, [])
   
   // Update document title based on current route
