@@ -7,7 +7,7 @@ import {
 import {
   Footer,
   NavBar
-} from './components';
+} from './components/Shell';
 import { Global, css } from '@emotion/react'
 
 const globalStyles = css`
