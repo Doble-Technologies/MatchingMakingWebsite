@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { theme } from "@src/theme";
 import { DonutProgressBar } from "@src/components/DonutProgressBar";
 import { gamesMap } from "@src/utilities/maps";
 import { Link } from "@src/components/Link";
 import { UserTile } from "@src/components/UserTile";
+import { config } from '@src/config';
 
 const PageContainer = styled("div")({
   display: "grid",
@@ -49,22 +50,34 @@ const tempUser = {
   friendsList: []
 };
 
-const tempRecentUser = {
-  displayName: 'TidalShocasdfasdfasdfadsfk',
-  doj: 'May 4, 2026',
-  avatar: null,
-  level: 1,
-  progression: 2
-};
-
 const gameInfo = [
   { csgo: { rank: 'L6' } },
   { mch: { rank: 'L1' } }
 ];
 
 export const Home = () => {
+  const [recentUser, setRecentUser] = useState({});
   const logged = tempUser?.displayName;
   const progress = Math.max(0, Math.min(tempUser.progression, 100));
+
+  useEffect(() => {
+    const init = async () => {
+      const getRecentUser = async () => {
+        return fetch(`${config.api_url}/view/recent/users`)
+          .then(response => response.json())
+          .catch(error => console.error('Error fetching data:', error));
+      };
+      const users = await getRecentUser();
+      const user = users?.users?.[0] || {};
+      setRecentUser({
+        ...user,
+        created_at: new Date(user.created_at).getTime(),
+        updated_at: new Date(user.updated_at).getTime(),
+      });
+    };
+    init();
+  }, []);
+
   return (
     <PageContainer>
       <ColumnWrapper>
@@ -145,7 +158,7 @@ export const Home = () => {
           </CardHeader>
           <LineBreaker style={{ paddingTop: "5px", marginBottom: "5px" }} />
           <CardBody>
-            <UserTile user={tempRecentUser} />
+            <UserTile user={recentUser} />
           </CardBody>
         </Card>
       </ColumnWrapper>

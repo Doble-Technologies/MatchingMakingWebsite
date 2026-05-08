@@ -2,6 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { theme } from '@src/theme';
 import { Layout } from '../Layout/Layout';
+import { getTimeAgo } from '@src/utilities';
 
 const UserCard = styled("div")({
   width: "100%",
@@ -57,7 +58,7 @@ export const UserTile = ({ user }) => {
                 fontWeight: 500
               }}
             >
-              Joined: {user?.doj}
+              Joined: {getTimeAgo(user?.created_at)}
             </p>
           </Layout.Stack>
         </Layout.Group>
@@ -66,7 +67,7 @@ export const UserTile = ({ user }) => {
             <p>New Test</p>
             <p>Special Test</p>
           </Layout.Stack>
-          <Button>
+          <Button onClick={() => window.location.assign(`${window.location.protocol}//${window.location.host}/profile/${user?.user_id}`)}>
             View
           </Button>
         </Layout.Group>
