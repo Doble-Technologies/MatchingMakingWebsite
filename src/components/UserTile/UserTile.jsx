@@ -50,7 +50,7 @@ export const UserTile = ({ user }) => {
         <Layout.Group space={4} alignItems='center'>
           <p>AVATAR</p>
           <Layout.Stack space={-10}>
-            <p>{user?.displayName?.length > 20 ? user?.displayName.substring(0, 20) + '...' : user?.displayName}</p>
+            <p>{user?.display_name?.length > 20 ? user?.display_name.substring(0, 20) + '...' : user?.display_name}</p>
             <p 
               style={{
                 fontSize: '10px',
@@ -63,10 +63,6 @@ export const UserTile = ({ user }) => {
           </Layout.Stack>
         </Layout.Group>
         <Layout.Group space={8} alignItems='center'>
-          <Layout.Stack>
-            <p>New Test</p>
-            <p>Special Test</p>
-          </Layout.Stack>
           <Button onClick={() => window.location.assign(`${window.location.protocol}//${window.location.host}/profile/${user?.user_id}`)}>
             View
           </Button>
