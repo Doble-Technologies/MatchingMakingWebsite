@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { theme } from '@src/theme';
 import { Layout } from '../Layout/Layout';
 import { getTimeAgo } from '@src/utilities';
+import { Button } from '@src/components/Common/Button';
 
 const UserCard = styled("div")({
   width: "100%",
@@ -17,24 +18,6 @@ const CardHeader = styled("div")({
   flexDirection: "row",
   justifyContent: "space-between",
   alignItems: "center",
-});
-
-const Button = styled('span')({
-  border: `1px solid ${theme.colors.border}`,
-  fontSize: '12px',
-  fontWeight: '600',
-  letterSpacing: '1.5px',
-  textTransform: 'uppercase',
-  padding: '4px 10px',
-  borderRadius: '4px',
-  cursor: 'pointer',
-  color: theme.colors.muted2,
-  '&:hover': {
-    background: theme.colors.accentDim,
-    borderColor: theme.colors.accent,
-    color: theme.colors.accent,
-    zIndex: 1,
-  }
 });
 
 const CardTitle = styled("p")({
@@ -63,7 +46,7 @@ export const UserTile = ({ user }) => {
           </Layout.Stack>
         </Layout.Group>
         <Layout.Group space={8} alignItems='center'>
-          <Button onClick={() => window.location.assign(`${window.location.protocol}//${window.location.host}/profile/${user?.user_id}`)}>
+          <Button action={() => window.location.assign(`${window.location.protocol}//${window.location.host}/profile/${user?.user_id}`)}>
             View
           </Button>
         </Layout.Group>
