@@ -37,10 +37,10 @@ export default defineConfig(({ mode }) => {
       allowedHosts: ['mm-dev.rcslabs.dev', '.rcslabs.dev'],
     },
     optimizeDeps: {
-      include: ['react', 'react-dom'],
+      include: ['react', 'react-dom', '@emotion/react', '@emotion/styled'],
     },
     resolve: {
-      dedupe: ['react', 'react-dom'],
+      dedupe: ['react', 'react-dom', '@emotion/react', '@emotion/styled'],
       alias: {
         '@src': path.resolve(__dirname, './src'),
       }

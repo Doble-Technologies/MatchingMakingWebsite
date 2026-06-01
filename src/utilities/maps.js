@@ -13,3 +13,7 @@ export const gamesAcnMap = {
   pubg: 'PUBG',
   val: 'VAL'
 };
+
+export const expLookup = {
+  
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { theme } from '@src/theme';
-import { Layout } from '../Layout/Layout';
+import { Group, Stack } from '../Layout';
 import { getTimeAgo } from '@src/utilities';
 import { Button } from '@src/components/Common/Button';
 
@@ -54,13 +54,13 @@ export const UserTile = ({ user }) => {
   return (
     <UserCard>
       <CardHeader>
-        <Layout.Group space={4} alignItems='center'>
+        <Group space={4} alignItems='center'>
           <Avatar>
             {avatar ? (
               <AvatarImage src={avatar} alt={`${user?.username || 'User'} avatar`} />
             ) : initials}
           </Avatar>
-          <Layout.Stack space={-10}>
+          <Stack space={-10}>
             <p>{user?.username?.length > 20 ? user?.username.substring(0, 20) + '...' : user?.username}</p>
             <p 
               style={{
@@ -71,13 +71,13 @@ export const UserTile = ({ user }) => {
             >
               Joined: {getTimeAgo(user?.created_at)}
             </p>
-          </Layout.Stack>
-        </Layout.Group>
-        <Layout.Group space={8} alignItems='center'>
+          </Stack>
+        </Group>
+        <Group space={8} alignItems='center'>
           <Button action={() => window.location.assign(`${window.location.protocol}//${window.location.host}/profile/${user?.user_id}`)}>
             View
           </Button>
-        </Layout.Group>
+        </Group>
       </CardHeader>
     </UserCard>
   );
