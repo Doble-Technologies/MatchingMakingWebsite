@@ -18,6 +18,11 @@ on:
         type: string
         description: Current Version of the package.json.
         default: '0.0.0'
+
+concurrency:
+  group: ${{ forgejo.workflow }}-${{ forgejo.event.pull_request.number || forgejo.ref }}
+  cancel-in-progress: true
+
 jobs:
   check-inputs:
     runs-on: 'nas'
