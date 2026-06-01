@@ -63,7 +63,7 @@ export const Home = () => {
   useEffect(() => {
     const init = async () => {
       const getRecentUser = async () => {
-        return fetch(`${config.api_url}/view/recent/users`)
+        return fetch(`${config.api_url}/view/latest/users`)
           .then(response => response.json())
           .catch(error => console.error('Error fetching data:', error));
       };
@@ -71,8 +71,7 @@ export const Home = () => {
       const user = users?.users?.[0] || {};
       setRecentUser({
         ...user,
-        created_at: new Date(user.created_at).getTime(),
-        updated_at: new Date(user.updated_at).getTime(),
+        created_at: new Date(user.created_at).getTime()
       });
     };
     init();

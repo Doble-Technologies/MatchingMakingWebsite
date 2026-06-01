@@ -1,15 +1,21 @@
 import { useEffect } from 'react';
-import { Outlet, Route, Routes, useLocation } from 'react-router-dom';
+import { Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Global, css } from '@emotion/react';
 import {
+  Auth,
+  ProtectedRoute,
+  useAuth,
+} from './Auth';
+import {
+  AuthError,
   Home,
+  LoggedOut,
   Profile
 } from './pages';
 import {
   Footer,
   NavBar
 } from './components/Shell';
-import { config } from './config';
 
 const globalStyles = css`
   @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
@@ -42,6 +48,9 @@ const globalStyles = css`
 // Title mapping function
 const getPageTitle = (pathname) => {
   if (pathname === '/') return 'Home';
+  if (pathname === '/auth') return null;
+  if (pathname === '/auth-error') return null;
+  if (pathname === '/logged-out') return null;
   if (pathname === '/login') return 'Login';
   if (pathname.includes('/settings')) return 'Settings';
   if (pathname.includes('/leaderboard')) return 'Leaderboard';
@@ -77,23 +86,36 @@ const AppLayout = ({ notifications }) => {
 
 export default function App() {
   const location = useLocation();
-
-  useEffect(() => {
-    const eventSource = new EventSource(`${config.api_url}/queue`);
-    console.log('config: ', config.api_url);
-    console.log('eventSource: ', eventSource);
-  }, []);
+  const navigate = useNavigate();
+  const { authError } = useAuth();
   
-  // Update document title based on current route
   useEffect(() => {
     const title = getPageTitle(location.pathname);
     document.title = title ? `MatchMaking | ${title}` : 'MatchMaking';
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (authError && location.pathname !== '/auth-error') {
+      navigate('/auth-error', { replace: true });
+    }
+  }, [authError, location.pathname, navigate]);
   
   return (
     <>
       <Global styles={globalStyles} />
       <Routes>
+        <Route
+          path="/auth"
+          element={<Auth />}
+        />
+        <Route
+          path="/auth-error"
+          element={<AuthError />}
+        />
+        <Route
+          path="/logged-out"
+          element={<LoggedOut />}
+        />
         <Route
           path="/login"
           element={<Home />}
@@ -121,7 +143,11 @@ export default function App() {
           />
           <Route
             path="/settings"
-            element={<Profile />}
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
           />
         </Route>
       </Routes>

@@ -3,6 +3,8 @@ import { theme } from '@src/theme';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { RiSettings5Line as SettingsIcon } from "react-icons/ri";
 import { NotificationBell } from './NotificationBell';
+import { ProfileDropdown } from './ProfileDropdown';
+import { useAuth } from '@src/Auth';
 
 const Nav = styled('nav')({
   display: 'flex',
@@ -15,16 +17,18 @@ const Nav = styled('nav')({
   fontFamily: theme.fonts.head,
 });
 
-const Logo = styled('div')({
-  fontSize: '24px',
-  fontWeight: '700',
-  letterSpacing: '3px',
-  color: theme.colors.accent,
-  cursor: 'pointer',
-  'span': {
-    color: theme.colors.text,
+const Logo = styled('div')`
+  font-family: ${theme.fonts.head};
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: ${theme.colors.text};
+  text-align: center;
+  span {
+    color: ${theme.colors.accent};
   }
-});
+`;
 
 const NavLinks = styled('div')({
   display: 'flex',
@@ -52,6 +56,25 @@ const NavRight = styled('div')({
   alignItems: 'center',
   gap: '10px',
 });
+
+const AuthAction = styled('button')(({ primary }) => ({
+  borderRadius: '6px',
+  border: `1px solid ${primary ? theme.colors.accent : theme.colors.border}`,
+  background: primary ? theme.colors.accentDim : 'transparent',
+  color: primary ? theme.colors.text : theme.colors.muted,
+  fontSize: '11px',
+  fontWeight: 700,
+  letterSpacing: '1.2px',
+  textTransform: 'uppercase',
+  padding: '8px 12px',
+  cursor: 'pointer',
+  transition: 'all .15s',
+  '&:hover': {
+    borderColor: theme.colors.accent,
+    color: theme.colors.text,
+    background: theme.colors.accentDim,
+  },
+}));
 
 const Avatar = styled('div')({
   width: '32px',
@@ -96,9 +119,15 @@ const links = [
 ];
 
 export const NavBar = ({ notifications }) => {
-  const navigate = useNavigate();
+  const { user, loading, logout } = useAuth();
   const { pathname } = useLocation();
-  const auth = true; // Change when Authing is added - Hard Code
+  const navigate = useNavigate();
+  const isAuthed = !!user;
+
+  const handleLogout = () => {
+    logout();
+    navigate('/logged-out');
+  };
 
   return (
     <Nav>
@@ -118,18 +147,32 @@ export const NavBar = ({ notifications }) => {
         ))}
       </NavLinks>
       <NavRight>
-        <NotificationBell data={notifications} />
-        {auth ? (
-          <Settings
-            onClick={() => navigate('/settings')}
-          >
-            <SettingsIcon />
-          </Settings>
-        ) : null}
-        <Avatar onClick={() => auth ? navigate('/profile') : navigate('/login')}>
-          {/* Change Avatar Initials to Get from User - Hard Code*/}
-          JD
-        </Avatar>
+        {isAuthed ? (
+          <>
+            <NotificationBell data={notifications} />
+            <Settings
+              onClick={() => navigate('/settings')}
+            >
+              <SettingsIcon />
+            </Settings>
+            <ProfileDropdown user={user} logout={handleLogout} />
+          </>
+        ) : (
+          <>
+            <AuthAction
+              onClick={() => navigate('/auth', { state: { mode: 'login', fromPath: pathname } })}
+              disabled={loading}
+            >
+              Login
+            </AuthAction>
+            <AuthAction
+              onClick={() => navigate('/auth', { state: { mode: 'register' } })}
+              disabled={loading}
+            >
+              Register
+            </AuthAction>
+          </>
+        )}
       </NavRight>
     </Nav>
   )
