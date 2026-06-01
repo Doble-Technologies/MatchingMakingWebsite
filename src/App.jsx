@@ -51,7 +51,6 @@ const getPageTitle = (pathname) => {
   if (pathname === '/auth') return null;
   if (pathname === '/auth-error') return null;
   if (pathname === '/logged-out') return null;
-  if (pathname === '/login') return 'Login';
   if (pathname.includes('/settings')) return 'Settings';
   if (pathname.includes('/leaderboard')) return 'Leaderboard';
   if (pathname.includes('/shop')) return 'Shop';
@@ -115,10 +114,6 @@ export default function App() {
         <Route
           path="/logged-out"
           element={<LoggedOut />}
-        />
-        <Route
-          path="/login"
-          element={<Home />}
         />
         <Route element={<AppLayout notifications={notifications} />}>
           <Route
