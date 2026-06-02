@@ -6,9 +6,9 @@ import {
   readCookie,
   writeTokenCookie,
   clearTokenCookie,
-  TOKEN_COOKIE_NAME,
+  TOKEN_COOKIE_NAME
 } from './authUtils';
-import { AuthContext } from './AuthContext.js';
+import { AuthContext } from './AuthContext';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -73,9 +73,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       const profileData = await profileRes.json();
-      console.log('profileRes: ', profileData);
       const backendUser = profileData?.details;
-      console.log('backendUser: ', backendUser);
       if (!backendUser) {
         clearSession(markAuthError);
         return false;
