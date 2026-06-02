@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
+import { useAuth } from "@src/Auth";
 import { theme } from "@src/theme";
 import { DonutProgressBar } from "@src/components/DonutProgressBar";
-import { gamesMap } from "@src/utilities/maps";
+import { gamesMap, transformXpToProgress } from "@src/utilities/maps";
 import { Link } from "@src/components/Link";
 import { UserTile } from "@src/components/UserTile";
 import { config } from '@src/config';
@@ -57,8 +58,9 @@ const gameInfo = [
 
 export const Home = () => {
   const [recentUser, setRecentUser] = useState({});
-  const logged = tempUser?.displayName;
-  const progress = Math.max(0, Math.min(tempUser.progression, 100));
+  const { user } = useAuth();
+  const logged = !!user;
+  const { level, progression, nextLevelAmount } = transformXpToProgress(user?.xp);
 
   useEffect(() => {
     const init = async () => {
@@ -85,12 +87,11 @@ export const Home = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Current Rank & Levels</CardTitle>
-                {tempUser?.level ? (
-                  <DonutProgressBar 
-                    text={tempUser.level || 1}
-                    progress={progress || 0}
-                  /> 
-                ) : null }
+                <DonutProgressBar 
+                  text={level || 0}
+                  progress={progression || 0}
+                  nextLevelAmount={nextLevelAmount || 100}
+                /> 
               </CardHeader>
               <LineBreaker style={{ paddingTop: "5px", marginBottom: "5px" }} />
               <CardBody>

@@ -28,8 +28,8 @@ const InnerText = styled('span')({
 const ringRadius = 15;
 const ringCircumference = 2 * Math.PI * ringRadius;
 
-export const DonutProgressBar = ({ text, progress }) => {
-  const ringOffset = ringCircumference - (progress / 100) * ringCircumference;
+export const DonutProgressBar = ({ text, progress, nextLevelAmount }) => {
+  const ringOffset = ringCircumference - (progress / nextLevelAmount) * ringCircumference;
   return (
     <Wrapper>
       <ProgressRing viewBox="0 0 36 36" aria-hidden="true">
