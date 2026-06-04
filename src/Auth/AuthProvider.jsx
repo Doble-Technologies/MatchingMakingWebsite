@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       const profileData = await profileRes.json();
-      const backendUser = profileData?.details;
+      const backendUser = profileData?.profile;
       if (!backendUser) {
         clearSession(markAuthError);
         return false;
