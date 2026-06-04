@@ -87,8 +87,7 @@ export const AuthProvider = ({ children }) => {
         xp: backendUser.xp,
         avatar: backendUser.avatar,
         bio: backendUser.bio,
-        createdAt: backendUser.created_at ?? backendUser.createdAt,
-        updatedAt: backendUser.updated_at ?? backendUser.updatedAt,
+        createdAt: backendUser.created_at ?? backendUser.createdAt
       });
       setAuthError(false);
       return true;
