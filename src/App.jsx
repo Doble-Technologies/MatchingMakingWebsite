@@ -48,6 +48,7 @@ const globalStyles = css`
 // Title mapping function
 const getPageTitle = (pathname) => {
   if (pathname === '/') return 'Home';
+  if (pathname === '/news') return 'News';
   if (pathname === '/auth') return null;
   if (pathname === '/auth-error') return null;
   if (pathname === '/logged-out') return null;
@@ -119,6 +120,10 @@ export default function App() {
           <Route
             path="/"
             element={<Home />}
+          />
+          <Route
+            path="/news"
+            element={<Profile />}
           />
           <Route
             path="/games"
