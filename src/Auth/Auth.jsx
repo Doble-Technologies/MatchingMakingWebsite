@@ -218,7 +218,7 @@ const FieldError = styled('p')`
   letter-spacing: 0.04em;
 `;
 
-const PasswordRequirements = styled('ul')`
+const FieldRequirements = styled('ul')`
   list-style: none;
   margin: 6px 0 0;
   padding: 0;
@@ -360,6 +360,10 @@ export const Auth = () => {
     return fallback;
   };
 
+  const usernameRules = [
+    { label: 'Username can only contain letters and numbers', test: u => /^[A-Za-z0-9]+$/.test(u) }
+  ]
+
   const passwordRules = [
     { label: 'No leading or trailing spaces', test: p => p === p.trim() },
     { label: 'At least 6 characters', test: p => p.length >= 6 },
@@ -368,15 +372,18 @@ export const Auth = () => {
     { label: 'One special character', test: p => /[^\w\s]/.test(p) },
   ];
 
+  const usernameValid = (u) => usernameRules.every(r => r.test(u));
   const passwordValid = (p) => passwordRules.every(r => r.test(p));
 
   const validate = () => {
     const errs = {};
     if (!fields.username) errs.username = 'Username is required';
+    else if (!usernameValid(fields.username))
+      errs.username = `Username ${mode === 'register' ? 'does not meet requirements' : 'is not valid'}`;
 
     if (!fields.password) errs.password = 'Password is required';
-    else if (mode === 'register' && !passwordValid(fields.password))
-      errs.password = 'Password does not meet requirements';
+    else if (!passwordValid(fields.password))
+      errs.password = `Password ${mode === 'register' ? 'does not meet requirements' : 'is not valid'}`;
 
     if (mode === 'register') {
       if (!fields.email) errs.email = 'Email is required';
@@ -493,6 +500,16 @@ export const Auth = () => {
               error={!!errors.username}
             />
             {errors.username && <FieldError>{errors.username}</FieldError>}
+            {mode === 'register' && (
+              <FieldRequirements>
+                {usernameRules.map(rule => (
+                  <Requirement key={rule.label} met={rule.test(fields.username)}>
+                    <span>{rule.test(fields.username) ? '✓' : '○'}</span>
+                    {rule.label}
+                  </Requirement>
+                ))}
+              </FieldRequirements>
+            )}
           </div>
 
           {mode === 'register' && (
@@ -521,14 +538,14 @@ export const Auth = () => {
             />
             {errors.password && <FieldError>{errors.password}</FieldError>}
             {mode === 'register' && (
-              <PasswordRequirements>
+              <FieldRequirements>
                 {passwordRules.map(rule => (
                   <Requirement key={rule.label} met={rule.test(fields.password)}>
                     <span>{rule.test(fields.password) ? '✓' : '○'}</span>
                     {rule.label}
                   </Requirement>
                 ))}
-              </PasswordRequirements>
+              </FieldRequirements>
             )}
           </div>
 
@@ -543,12 +560,12 @@ export const Auth = () => {
                 error={!!errors.confirm}
               />
               {errors.confirm && <FieldError>{errors.confirm}</FieldError>}
-              <PasswordRequirements>
+              <FieldRequirements>
                 <Requirement met={fields.confirm.length > 0 && fields.confirm === fields.password}>
                   <span>{fields.confirm.length > 0 && fields.confirm === fields.password ? '✓' : '○'}</span>
                   Passwords match
                 </Requirement>
-              </PasswordRequirements>
+              </FieldRequirements>
             </div>
           )}
         </FieldGroup>
