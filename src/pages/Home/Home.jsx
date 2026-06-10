@@ -47,13 +47,24 @@ const CardTitle = styled("p")({
 const CardBody = styled("div")({});
 
 const RightPanelCard = styled(Card)({
-  padding: "10px",
+  padding: 0,
   background: theme.colors.surface,
   borderColor: theme.colors.border2,
+  overflow: "hidden",
 });
 
 const PanelHeader = styled(CardHeader)({
-  marginBottom: "4px",
+  padding: "10px",
+  background: theme.colors.surface2,
+});
+
+const PanelBody = styled(CardBody)({
+  padding: "10px",
+  background: theme.colors.surface,
+});
+
+const FullWidthDivider = styled(LineBreaker)({
+  margin: 0,
 });
 
 const PanelTitle = styled(CardTitle)({
@@ -213,8 +224,8 @@ export const Home = () => {
               <PanelTitle>Friend List</PanelTitle>
               <Link link="/profile" text="Manage" size="14px" />
             </PanelHeader>
-            <LineBreaker style={{ paddingTop: "5px", marginBottom: "5px" }} />
-            <CardBody>
+            <FullWidthDivider />
+            <PanelBody>
               {tempUser?.friendsList?.length > 0 ? (
                 tempUser?.friendsList?.map((friendName, idx) => {
                   return <p key={`${friendName}-${idx}`}>{friendName}</p>;
@@ -224,17 +235,17 @@ export const Home = () => {
                   <p>Currently No Friends to Display</p>
                 </EmptyState>
               )}
-            </CardBody>
+            </PanelBody>
           </RightPanelCard>
         ) : null}
         <RightPanelCard>
           <PanelHeader>
             <PanelTitle>Most Recent Created User</PanelTitle>
           </PanelHeader>
-          <LineBreaker style={{ paddingTop: "5px", marginBottom: "10px" }} />
-          <CardBody>
+          <FullWidthDivider />
+          <PanelBody>
             <UserTile user={recentUser} />
-          </CardBody>
+          </PanelBody>
         </RightPanelCard>
       </ColumnWrapper>
     </PageContainer>
