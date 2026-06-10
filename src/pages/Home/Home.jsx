@@ -6,6 +6,7 @@ import { DonutProgressBar } from "@src/components/DonutProgressBar";
 import { gamesMap, transformXpToProgress } from "@src/utilities/maps";
 import { Link } from "@src/components/Link";
 import { UserTile } from "@src/components/UserTile";
+import { Button } from "@src/components/Common/Button";
 import { config } from '@src/config';
 
 const PageContainer = styled("div")({
@@ -44,6 +45,74 @@ const CardTitle = styled("p")({
 });
 
 const CardBody = styled("div")({});
+
+const RightPanelCard = styled(Card)({
+  padding: "10px",
+  background: theme.colors.surface,
+  borderColor: theme.colors.border2,
+});
+
+const PanelHeader = styled(CardHeader)({
+  marginBottom: "4px",
+});
+
+const PanelTitle = styled(CardTitle)({
+  margin: 0,
+  fontFamily: theme.fonts.mono,
+  fontSize: "12px",
+  letterSpacing: "1.2px",
+  wordSpacing: "-4px",
+  textTransform: "uppercase",
+  color: theme.colors.muted2,
+});
+
+const EmptyState = styled("div")({
+  textAlign: "center",
+  paddingTop: "16px",
+  paddingBottom: "16px",
+  color: theme.colors.muted2
+});
+
+const PatchNotesHeader = styled("div")({
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginBottom: "10px",
+});
+
+const PatchNotesTitleWrap = styled("div")({
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  gap: "10px",
+});
+
+const PatchNotesAccent = styled("div")({
+  width: "3px",
+  height: "24px",
+  borderRadius: "2px",
+  background: theme.colors.accent,
+});
+
+const PatchNotesTitle = styled("p")({
+  margin: 0,
+  fontSize: "34px",
+  lineHeight: "1",
+  fontWeight: 700,
+  fontFamily: theme.fonts.head,
+  textTransform: "uppercase",
+  letterSpacing: "1px",
+  color: theme.colors.muted2,
+});
+
+const FeedCard = styled(Card)({
+  minHeight: "220px",
+  padding: "10px",
+  background: theme.colors.surface,
+  borderColor: theme.colors.border2,
+});
+
 const tempUser = {
   displayName: 'Carnage',
   level: 1,
@@ -123,15 +192,27 @@ export const Home = () => {
         ) : null}
       </ColumnWrapper>
       <ColumnWrapper>
-        <Card>Feed</Card>
+        <PatchNotesHeader>
+          <PatchNotesTitleWrap>
+            <PatchNotesAccent />
+            <PatchNotesTitle>Hot News</PatchNotesTitle>
+          </PatchNotesTitleWrap>
+          <Button 
+            action={() => {
+              return window.location.assign(`${window.location.protocol}//${window.location.host}/news`)
+            }}
+          >
+            All Updates/News
+          </Button>
+        </PatchNotesHeader>
       </ColumnWrapper>
       <ColumnWrapper>
         {logged ? (
-          <Card>
-            <CardHeader>
-              <CardTitle>Friend List</CardTitle>
+          <RightPanelCard>
+            <PanelHeader>
+              <PanelTitle>Friend List</PanelTitle>
               <Link link="/profile" text="Manage" size="14px" />
-            </CardHeader>
+            </PanelHeader>
             <LineBreaker style={{ paddingTop: "5px", marginBottom: "5px" }} />
             <CardBody>
               {tempUser?.friendsList?.length > 0 ? (
@@ -139,28 +220,22 @@ export const Home = () => {
                   return <p key={`${friendName}-${idx}`}>{friendName}</p>;
                 })
               ) : (
-                <div
-                  style={{
-                    textAlign: "center",
-                    paddingTop: "4px",
-                    paddingBottom: "4px",
-                  }}
-                >
+                <EmptyState>
                   <p>Currently No Friends to Display</p>
-                </div>
+                </EmptyState>
               )}
             </CardBody>
-          </Card>
+          </RightPanelCard>
         ) : null}
-        <Card>
-          <CardHeader>
-            <CardTitle>Most Recent Created User</CardTitle>
-          </CardHeader>
-          <LineBreaker style={{ paddingTop: "5px", marginBottom: "5px" }} />
+        <RightPanelCard>
+          <PanelHeader>
+            <PanelTitle>Most Recent Created User</PanelTitle>
+          </PanelHeader>
+          <LineBreaker style={{ paddingTop: "5px", marginBottom: "10px" }} />
           <CardBody>
             <UserTile user={recentUser} />
           </CardBody>
-        </Card>
+        </RightPanelCard>
       </ColumnWrapper>
     </PageContainer>
   );
