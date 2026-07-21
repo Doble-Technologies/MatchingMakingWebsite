@@ -126,6 +126,14 @@ export default function App() {
             element={<Profile />}
           />
           <Route
+            path="/patchnotes"
+            element={<Profile />}
+          />
+          <Route
+            path="/patchnote/:id"
+            element={<Profile />}
+          />
+          <Route
             path="/games"
             element={<Profile />}
           />
@@ -138,7 +146,7 @@ export default function App() {
             element={<Profile />}
           />
           <Route
-            path="/profile/:id?"
+            path="/profile/:username?"
             element={<Profile />}
           />
           <Route

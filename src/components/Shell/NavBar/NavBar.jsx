@@ -25,6 +25,7 @@ const Logo = styled('div')`
   text-transform: uppercase;
   color: ${theme.colors.text};
   text-align: center;
+  cursor: pointer;
   span {
     color: ${theme.colors.accent};
   }

@@ -4,6 +4,7 @@ import { theme } from '@src/theme';
 import { Group, Stack } from '../Layout';
 import { getTimeAgo } from '@src/utilities';
 import { Button } from '@src/components/Common/Button';
+import { DonutProgressBar } from '../DonutProgressBar';
 
 const Avatar = styled('div')({
   width: '32px',
@@ -48,7 +49,7 @@ const CardTitle = styled('p')({
 
 const CardBody = styled('div')({});
 
-export const UserTile = ({ user }) => {
+export const UserTile = ({ user, recentUserProgress }) => {
   const initials = (user?.username || 'U').slice(0, 2).toUpperCase();
   const avatar = user?.avatar;
   return (
@@ -74,6 +75,13 @@ export const UserTile = ({ user }) => {
           </Stack>
         </Group>
         <Group space={8} alignItems='center'>
+          {recentUserProgress ? (
+            <DonutProgressBar
+              text={recentUserProgress?.level || 0}
+              progress={recentUserProgress?.progression || 0}
+              nextLevelAmount={recentUserProgress?.nextLevelAmount || 100}
+            />
+          ) : null}
           <Button action={() => window.location.assign(`${window.location.protocol}//${window.location.host}/profile/${user?.user_id}`)}>
             View
           </Button>
