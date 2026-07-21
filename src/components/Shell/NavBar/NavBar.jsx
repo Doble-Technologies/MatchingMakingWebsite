@@ -116,7 +116,7 @@ const links = [
   { label: 'Home', path: '/' },
   { label: 'Games', path: '/games' },
   { label: 'Leaderboard', path: '/leaderboard' },
-  { label: 'Shop', path: '/shop' }
+  { label: 'News', path: '/news' }
 ];
 
 export const NavBar = ({ notifications }) => {

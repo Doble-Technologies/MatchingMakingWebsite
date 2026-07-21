@@ -54,7 +54,7 @@ const getPageTitle = (pathname) => {
   if (pathname === '/logged-out') return null;
   if (pathname.includes('/settings')) return 'Settings';
   if (pathname.includes('/leaderboard')) return 'Leaderboard';
-  if (pathname.includes('/shop')) return 'Shop';
+  if (pathname.includes('/news')) return 'News';
   if (pathname.includes('/games')) return 'Games';
   if (pathname.includes('/profile')) return 'Profile';
   return null;
@@ -68,7 +68,7 @@ const notifications = [
   { id: 4, icon: 'friend_add', title: 'You have successfully added AKaliber as a friend', createdAt: 1773675022000, unread: true },
   { id: 5, icon: 'friend_remove', title: 'You have successfully removed AKaliber as a friend', createdAt: 1773649822000, unread: true },
   { id: 6, icon: 'friend_block', title: 'You successfully blocked AKaliber', createdAt: 1773477022000, unread: true },
-  { id: 7, icon: 'shop', title: 'Your shop order was fulfilled', createdAt: 1773304222000, unread: false },
+  { id: 7, icon: 'news', title: 'Your News order was fulfilled', createdAt: 1773304222000, unread: false },
   { id: 8, icon: 'won_game', title: 'Game Won - CS2 - ID: 123182', createdAt: 1770888622000, unread: false }
 ];
 
@@ -142,7 +142,7 @@ export default function App() {
             element={<Profile />}
           />
           <Route
-            path="/shop"
+            path="/news"
             element={<Profile />}
           />
           <Route
