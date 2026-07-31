@@ -15,6 +15,7 @@ import {
   RiInformationLine as InformationIcon
 } from 'react-icons/ri';
 import { FooterPagination } from './helpers';
+import { Button } from '@src/components/Common/Button';
 
 const Wrapper = styled('div')({
   position: 'relative',
@@ -89,24 +90,6 @@ const DropdownFooter = styled('div')({
   letterSpacing: '1.5px',
   textTransform: 'uppercase',
   color: theme.colors.muted2,
-});
-
-const ReadAllNotificationsButton = styled('span')({
-  border: `1px solid ${theme.colors.border}`,
-  fontSize: '12px',
-  fontWeight: '600',
-  letterSpacing: '1.5px',
-  textTransform: 'uppercase',
-  padding: '4px 10px',
-  borderRadius: '4px',
-  cursor: 'pointer',
-  color: theme.colors.muted2,
-  '&:hover': {
-    background: theme.colors.accentDim,
-    borderColor: theme.colors.accent,
-    color: theme.colors.accent,
-    zIndex: 1,
-  }
 });
 
 const Item = styled('div')(({ unread }) => ({
@@ -233,13 +216,13 @@ export const NotificationBell = ({ data }) => {
         <Dropdown>
           <DropdownHeader>
             Notifications
-            <ReadAllNotificationsButton
-              onClick={() => {
+            <Button
+              action={() => {
                 return markAllNotificationsRead();
               }}
             >
               Read All
-            </ReadAllNotificationsButton>
+            </Button>
           </DropdownHeader>
           {currentNotifications?.map((n) => {
             const Icon = notificationIconMap[n?.icon] || notificationIconMap.default;

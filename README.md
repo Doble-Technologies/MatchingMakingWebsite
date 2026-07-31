@@ -18,7 +18,7 @@ Planned features:
   - Simple login screen
 - **Profile**
   - Display player stats
-- **Shop**
+- **News**
 - **Queue**
   - Queue button
   - Game options (e.g., *CS2*, *League of Legends*)

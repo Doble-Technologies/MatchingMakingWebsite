@@ -1,13 +1,21 @@
 import { useEffect } from 'react';
-import { Outlet, Route, Routes, useLocation } from 'react-router-dom';
+import { Outlet, Route, Routes, useLocation, useNavigate } from 'react-router';
+import { Global, css } from '@emotion/react';
 import {
+  Auth,
+  ProtectedRoute,
+  useAuth,
+} from './Auth';
+import {
+  AuthError,
   Home,
+  LoggedOut,
   Profile
 } from './pages';
 import {
+  Footer,
   NavBar
-} from './components';
-import { Global, css } from '@emotion/react'
+} from './components/Shell';
 
 const globalStyles = css`
   @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
@@ -40,10 +48,13 @@ const globalStyles = css`
 // Title mapping function
 const getPageTitle = (pathname) => {
   if (pathname === '/') return 'Home';
-  if (pathname === '/login') return 'Login';
+  if (pathname === '/news') return 'News';
+  if (pathname === '/auth') return null;
+  if (pathname === '/auth-error') return null;
+  if (pathname === '/logged-out') return null;
   if (pathname.includes('/settings')) return 'Settings';
   if (pathname.includes('/leaderboard')) return 'Leaderboard';
-  if (pathname.includes('/shop')) return 'Shop';
+  if (pathname.includes('/news')) return 'News';
   if (pathname.includes('/games')) return 'Games';
   if (pathname.includes('/profile')) return 'Profile';
   return null;
@@ -57,42 +68,70 @@ const notifications = [
   { id: 4, icon: 'friend_add', title: 'You have successfully added AKaliber as a friend', createdAt: 1773675022000, unread: true },
   { id: 5, icon: 'friend_remove', title: 'You have successfully removed AKaliber as a friend', createdAt: 1773649822000, unread: true },
   { id: 6, icon: 'friend_block', title: 'You successfully blocked AKaliber', createdAt: 1773477022000, unread: true },
-  { id: 7, icon: 'shop', title: 'Your shop order was fulfilled', createdAt: 1773304222000, unread: false },
+  { id: 7, icon: 'news', title: 'Your News order was fulfilled', createdAt: 1773304222000, unread: false },
   { id: 8, icon: 'won_game', title: 'Game Won - CS2 - ID: 123182', createdAt: 1770888622000, unread: false }
 ];
 
 const AppLayout = ({ notifications }) => {
   return (
-    <div>
+    <div css={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <NavBar notifications={notifications} />
-      <main>
+      <main css={{ flex: 1, minHeight: 0 }}>
         <Outlet />
       </main>
+      <Footer />
     </div>
   )
 };
 
 export default function App() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { authError } = useAuth();
   
-  // Update document title based on current route
   useEffect(() => {
     const title = getPageTitle(location.pathname);
     document.title = title ? `MatchMaking | ${title}` : 'MatchMaking';
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (authError && location.pathname !== '/auth-error') {
+      navigate('/auth-error', { replace: true });
+    }
+  }, [authError, location.pathname, navigate]);
   
   return (
     <>
       <Global styles={globalStyles} />
       <Routes>
         <Route
-          path="/login"
-          element={<Home />}
+          path="/auth"
+          element={<Auth />}
+        />
+        <Route
+          path="/auth-error"
+          element={<AuthError />}
+        />
+        <Route
+          path="/logged-out"
+          element={<LoggedOut />}
         />
         <Route element={<AppLayout notifications={notifications} />}>
           <Route
             path="/"
             element={<Home />}
+          />
+          <Route
+            path="/news"
+            element={<Profile />}
+          />
+          <Route
+            path="/patchnotes"
+            element={<Profile />}
+          />
+          <Route
+            path="/patchnote/:id"
+            element={<Profile />}
           />
           <Route
             path="/games"
@@ -103,16 +142,20 @@ export default function App() {
             element={<Profile />}
           />
           <Route
-            path="/shop"
+            path="/news"
             element={<Profile />}
           />
           <Route
-            path="/profile/:id?"
+            path="/profile/:username?"
             element={<Profile />}
           />
           <Route
             path="/settings"
-            element={<Profile />}
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
           />
         </Route>
       </Routes>
