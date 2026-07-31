@@ -360,7 +360,7 @@ export const Home = () => {
               {featuredNews ? (
                 <PatchNotesFeaturedCard onClick={() => goToPatchNote(featuredNews)}>
                   {isNewsFromLastWeek(featuredNews) ? (
-                    <PatchNotesBadge>Latest</PatchNotesBadge>
+                    <PatchNotesBadge>New Update</PatchNotesBadge>
                   ) : null}
                   <PatchNotesHeroImage src={featuredNews?.ImageUrl} alt={featuredNews?.title} />
                   <PatchNotesContent featured>
@@ -387,7 +387,7 @@ export const Home = () => {
                       onClick={() => goToPatchNote(item)}
                     >
                       {isNewsFromLastWeek(item) ? (
-                        <PatchNotesBadge>Latest</PatchNotesBadge>
+                        <PatchNotesBadge>New Update</PatchNotesBadge>
                       ) : null}
                       <PatchNotesMiniImage src={item?.ImageUrl} alt={item?.title} />
                       <PatchNotesContent>
