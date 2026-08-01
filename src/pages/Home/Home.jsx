@@ -362,7 +362,7 @@ export const Home = () => {
                   {isNewsFromLastWeek(featuredNews) ? (
                     <PatchNotesBadge>New Update</PatchNotesBadge>
                   ) : null}
-                  <PatchNotesHeroImage src={featuredNews?.ImageUrl} alt={featuredNews?.title} />
+                  <PatchNotesHeroImage src={featuredNews?.imageUrl} alt={featuredNews?.title} />
                   <PatchNotesContent featured>
                     <PatchNotesMetaRow>
                       <PatchNotesTitleText featured>{featuredNews?.title}</PatchNotesTitleText>
@@ -389,7 +389,7 @@ export const Home = () => {
                       {isNewsFromLastWeek(item) ? (
                         <PatchNotesBadge>New Update</PatchNotesBadge>
                       ) : null}
-                      <PatchNotesMiniImage src={item?.ImageUrl} alt={item?.title} />
+                      <PatchNotesMiniImage src={item?.imageUrl} alt={item?.title} />
                       <PatchNotesContent>
                         <PatchNotesMetaRow>
                           <PatchNotesTitleText>{item?.title}</PatchNotesTitleText>
