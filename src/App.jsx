@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, Route, Routes, useLocation, useNavigate } from 'react-router';
 import { Global, css } from '@emotion/react';
 import {
   Auth,
