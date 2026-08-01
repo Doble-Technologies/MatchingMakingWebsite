@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { theme } from '@src/theme';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router';
 import { RiSettings5Line as SettingsIcon } from "react-icons/ri";
 import { NotificationBell } from './NotificationBell';
 import { ProfileDropdown } from './ProfileDropdown';

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAuth } from "@src/Auth";
 import { useNews } from "@src/hooks/useNews";
 import { theme } from "@src/theme";
@@ -352,8 +352,6 @@ export const Home = () => {
           const visibleNews = news.slice(0, 5);
           const featuredNews = visibleNews[0];
           const secondaryNews = visibleNews.slice(1);
-
-          console.log('news: ', news);
 
           return (
             <PatchNotesList>

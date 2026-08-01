@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import styled from '@emotion/styled';
 import { theme } from '@src/theme';
 
@@ -60,7 +60,6 @@ export const ProfileDropdown = ({ user, logout }) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
-  console.log('user: ', user);
   const { avatar } = user;
   const initials = (user?.username || 'U').slice(0, 2).toUpperCase();
 
