@@ -82,7 +82,7 @@ export const UserTile = ({ user, recentUserProgress }) => {
               nextLevelAmount={recentUserProgress?.nextLevelAmount || 100}
             />
           ) : null}
-          <Button action={() => window.location.assign(`${window.location.protocol}//${window.location.host}/profile/${user?.user_id}`)}>
+          <Button action={() => window.location.assign(`${window.location.protocol}//${window.location.host}/profile/${user?.username}`)}>
             View
           </Button>
         </Group>
