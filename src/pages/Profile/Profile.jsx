@@ -33,16 +33,13 @@ const styles = {
     borderRadius: 18,
     overflow: 'hidden',
     position: 'relative',
-    background:
-      'linear-gradient(135deg,#23466b 0%, #305f92 50%, #3b82f6 100%)',
-    border: `1px solid ${theme.colors.border}`,
+    background: theme.colors.surface,
+    border: `2px solid ${theme.colors.border}`,
   }),
 
   bannerOverlay: css({
     position: 'absolute',
     inset: 0,
-    background:
-      'linear-gradient(to top, rgba(0,0,0,.75), rgba(0,0,0,.15))',
   }),
 
   profileSection: css({
@@ -67,19 +64,19 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: 12,
-    fontSize: 36,
+    fontSize: theme.fontSize.heading,
     fontWeight: 700,
   }),
 
   bio: css({
     marginTop: 8,
     color: theme.colors.muted2,
-    fontSize: 17,
+    fontSize: theme.fontSize.body,
   }),
 
   online: css({
-    color: '#3ddc84',
-    fontSize: 12,
+    color: theme.colors.online,
+    fontSize: '1rem',
   }),
 
   body: css({
@@ -128,7 +125,7 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     marginBottom: 14,
-    fontSize: 17,
+    fontSize: theme.fontSize.label,
   }),
 
   infoRow: css({

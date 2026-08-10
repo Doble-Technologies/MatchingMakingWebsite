@@ -13,9 +13,21 @@ export const theme = {
     text: '#ffffff',
     muted: '#6b8fa8',
     muted2: '#c0d4e8',
+    online: '#3ddc84',
   },
   fonts: {
     head: "'Rajdhani', sans-serif",
     mono: "'IBM Plex Mono', monospace",
   },
-}
+  fontSize: {
+    body: 16,
+    label: 17,
+    small: 15,
+    cardTitle: 22,
+    heading: 36,
+  },
+  gradients: {
+    overlay: 'linear-gradient(to top, rgba(0,0,0,.75), rgba(0,0,0,.15))',
+    primary: `linear-gradient(135deg, #60a5fa, #3b82f6)`,
+  },
+};
