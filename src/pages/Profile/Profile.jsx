@@ -238,7 +238,7 @@ export const Profile = () => {
         reputation: data.profile?.reputation ?? prev.reputation,
         favoriteGames: data.profile?.favoriteGames ?? prev.favoriteGames,
         preferredRoles: data.profile?.preferredRoles ?? prev.preferredRoles,
-        createdAt: data.profile?.created_at ?? prev.created_at
+        createdAt: data.profile?.created_at ?? prev.createdAt
       }));
     } catch (err) {
       setError(err.message || 'Unable to load profile');
