@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { css } from '@emotion/react';
+import { useParams } from 'react-router';
+import styled from "@emotion/styled";
+import { useAuth } from "@src/Auth";
 import { config } from '@src/config';
-
+import { transformXpToProgress } from "@src/utilities/maps";
+import { DonutProgressBar } from "@src/components/DonutProgressBar";
 import {
+  FaAward,
   FaTrophy,
   FaEnvelope,
   FaCalendarAlt,
@@ -14,176 +18,161 @@ import {
 
 import { theme } from '@src/theme';
 
-const styles = {
-  page: css({
-    background: theme.colors.bg,
-    color: theme.colors.text,
-    minHeight: '100vh',
-    padding: 32,
-    fontFamily: theme.fonts.head,
-  }),
+const PageContainer = styled("div")({
+  maxWidth: 1300,
+  padding: 32,
+  margin: '0 auto'
+});
 
-  container: css({
-    maxWidth: 1300,
-    margin: '0 auto',
-  }),
+const Banner = styled("div")({
+  display: 'flex',
+  alignItems: 'center',
+  padding: 20,
+  borderRadius: 18,
+  overflow: 'hidden',
+  background: theme.colors.surface,
+  border: `2px solid ${theme.colors.border}`
+});
 
-  banner: css({
-    height: 240,
-    borderRadius: 18,
-    overflow: 'hidden',
-    position: 'relative',
-    background: theme.colors.surface,
-    border: `2px solid ${theme.colors.border}`,
-  }),
+const ProfileDetails = styled("div")({
+  display: 'flex',
+  alignItems: 'flex-end',
+  gap: 24
+});
 
-  bannerOverlay: css({
-    position: 'absolute',
-    inset: 0,
-  }),
+const Avatar = styled("img")({
+  width: 140,
+  height: 140,
+  borderRadius: '50%',
+  objectFit: 'cover',
+  border: `4px solid ${theme.colors.surface}`,
+  background: theme.colors.surface
+});
 
-  profileSection: css({
-    position: 'absolute',
-    bottom: 28,
-    left: 32,
-    display: 'flex',
-    alignItems: 'flex-end',
-    gap: 24,
-  }),
+const UsernameProfileHeader = styled("div")({
+  display: 'flex',
+  alignItems: 'center',
+  gap: 12,
+  fontSize: theme.fontSize.heading,
+  fontWeight: 700
+});
 
-  avatar: css({
-    width: 140,
-    height: 140,
-    borderRadius: '50%',
-    objectFit: 'cover',
-    border: `4px solid ${theme.colors.surface}`,
-    background: theme.colors.surface,
-  }),
+const UserBio = styled("div")({
+  marginTop: 8,
+  color: theme.colors.muted2,
+  fontSize: theme.fontSize.body
+});
 
-  username: css({
-    display: 'flex',
-    alignItems: 'center',
-    gap: 12,
-    fontSize: theme.fontSize.heading,
-    fontWeight: 700,
-  }),
+const ProfileBody = styled("div")({
+  display: 'flex',
+  gap: 24,
+  marginTop: 24,
+  alignItems: 'flex-start',
+  '@media(max-width:900px)': {
+    flexDirection: 'column'
+  }
+});
 
-  bio: css({
-    marginTop: 8,
-    color: theme.colors.muted2,
-    fontSize: theme.fontSize.body,
-  }),
+const Sidebar = styled("div")({
+  width: 330,
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 20,
+  '@media(max-width:900px)': {
+    width: '100%'
+  }
+});
 
-  online: css({
-    color: theme.colors.online,
-    fontSize: '1rem',
-  }),
+const ProfileContent = styled("div")({
+  flex: 1,
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 20
+});
 
-  body: css({
-    display: 'flex',
-    gap: 24,
-    marginTop: 24,
-    alignItems: 'flex-start',
+const Card = styled("div")({
+  background: theme.colors.surface,
+  border: `1px solid ${theme.colors.border}`,
+  borderRadius: 16,
+  padding: 22
+});
 
-    '@media(max-width:900px)': {
-      flexDirection: 'column',
-    },
-  }),
+const CardTitle = styled("div")({
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  width: '100%',
+  fontSize: 22,
+  fontWeight: 700,
+  paddingBottom: 10
+});
 
-  sidebar: css({
-    width: 330,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 20,
+const StatRow = styled("div")({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: 8,
+  fontSize: theme.fontSize.label
+});
 
-    '@media(max-width:900px)': {
-      width: '100%',
-    },
-  }),
+const InfoRow = styled("div")({
+  display: 'flex',
+  alignItems: 'center',
+  gap: 12,
+  marginBottom: 14,
+  color: theme.colors.muted2,
+  fontSize: 16
+});
 
-  content: css({
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 20,
-  }),
+const ChipCard = styled("div")({
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: 12
+});
 
-  card: css({
-    background: theme.colors.surface,
-    border: `1px solid ${theme.colors.border}`,
-    borderRadius: 16,
-    padding: 22,
-  }),
+const Chip = styled("div")({
+  background: theme.colors.highlight,
+  color: theme.colors.text,
+  borderRadius: 999,
+  padding: '10px 18px',
+  border: `1px solid ${theme.colors.border}`,
+  fontSize: 15
+});
 
-  cardTitle: css({
-    fontSize: 22,
-    marginBottom: 18,
-    fontWeight: 700,
-  }),
+const AchievementCard = styled("div")({
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fill,minmax(140px,1fr))',
+  gap: 16,
+  padding: 10
+});
 
-  statRow: css({
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginBottom: 14,
-    fontSize: theme.fontSize.label,
-  }),
+const Achievement = styled("div")({
+  background: theme.colors.surface2,
+  borderRadius: 12,
+  padding: 20,
+  textAlign: 'center',
+  border: `1px solid ${theme.colors.border}`,
+  transition: '.2s',
+  ':hover': {
+    background: theme.colors.surface3,
+    transform: 'translateY(-3px)'
+  }
+});
 
-  infoRow: css({
-    display: 'flex',
-    alignItems: 'center',
-    gap: 12,
-    marginBottom: 14,
-    color: theme.colors.muted2,
-    fontSize: 16,
-  }),
-
-  chips: css({
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: 12,
-  }),
-
-  chip: css({
-    background: theme.colors.highlight,
-    color: theme.colors.text,
-    borderRadius: 999,
-    padding: '10px 18px',
-    border: `1px solid ${theme.colors.border}`,
-    fontSize: 15,
-  }),
-
-  achievements: css({
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill,minmax(140px,1fr))',
-    gap: 16,
-  }),
-
-  achievement: css({
-    background: theme.colors.surface2,
-    borderRadius: 12,
-    padding: 20,
-    textAlign: 'center',
-    border: `1px solid ${theme.colors.border}`,
-    transition: '.2s',
-
-    ':hover': {
-      background: theme.colors.surface3,
-      transform: 'translateY(-3px)',
-    },
-  }),
-
-  achievementTitle: css({
-    marginTop: 12,
-    color: theme.colors.muted2,
-  }),
-};
+const AchievementTitle = styled("div")({
+  marginTop: 12,
+  color: theme.colors.muted2
+});
 
 export const Profile = () => {
+  const { user } = useAuth();
+  const { username: pathUsername } = useParams();
+
   const [profile, setProfile] = useState({
     username: '',
     avatar: '',
-    xp: 0,
-    level: 0,
+    levelInfo: {},
     bio: '',
     email: '',
     online: false,
@@ -193,34 +182,53 @@ export const Profile = () => {
     reputation: 0,
     favoriteGames: [],
     preferredRoles: [],
+    createdAt: ''
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const response = await fetch(`${config.api_url}/user/profile/${'augustafrankie23'}`, {
-          method: 'GET',
-          credentials: 'include',
-        });
+  const userAchievements = [
+    { id: 'veteran', title: 'Veteran', icon: FaTrophy, color: '#f4c542' },
+    { id: '700', title: '700+ Matches', icon: FaGamepad, color: '#60a5fa' },
+    { id: 'toprated', title: 'Top Rated', icon: FaStar, color: '#ff8b3d' },
+    { id: 'teamplayer', title: 'Team Player', icon: FaTrophy, color: '#9bdb6d' }
+  ];
 
-        if (!response.ok) {
-          throw new Error(`Request failed with status ${response.status}`);
-        }
+  const userAccountInfo = [
+    { id: 'email', title: profile?.email || 'E-Mail Not Found', icon: FaEnvelope },
+    { id: 'createdAt', title: profile?.createdAt || 'Creation Date Not Found', icon: FaCalendarAlt },
+    { id: 'reputation', title: `Reputation ${profile.reputation || 'Not Found'}`, icon: FaStar, color: '#FFD166' },
+    { id: 'region', title: profile?.region || 'Region Not Found', icon: FaGlobeAmericas }
+  ];
 
-        const data = await response.json();
-        if (!data) {
-          throw new Error('Invalid profile response');
-        }
-        console.log(data);
+  const userStats = [
+    { id: 'matches', title: 'Matches', value: profile.matchesPlayed },
+    { id: 'winrate', title: 'Win Rate', value: `${profile.winRate}%` }
+  ];
 
-        setProfile((prev) => ({
+  const fetchProfile = async () => {
+    try {
+      const response = await fetch(`${config.api_url}/user/profile/${pathUsername || user?.username}`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (!data) {
+        throw new Error('Invalid profile response');
+      }
+      setError(null);
+      console.log(data);
+
+      setProfile((prev) => ({
         ...prev,
         username: data.profile?.username ?? prev.username,
         avatar: data.profile?.avatar ?? prev.avatar,
-        xp: data.profile?.xp ?? prev.xp,
-        level: data.profile?.level ?? prev.level, // Calculate this
+        levelInfo: transformXpToProgress(data.profile?.xp) ?? transformXpToProgress(prev.xp),
         bio: data.profile?.bio ?? prev.bio,
         email: data.profile?.email ?? prev.email,
         online: data.profile?.online ?? prev.online,
@@ -230,195 +238,138 @@ export const Profile = () => {
         reputation: data.profile?.reputation ?? prev.reputation,
         favoriteGames: data.profile?.favoriteGames ?? prev.favoriteGames,
         preferredRoles: data.profile?.preferredRoles ?? prev.preferredRoles,
+        createdAt: data.profile?.created_at ?? prev.created_at
       }));
-      } catch (err) {
-        setError(err.message || 'Unable to load profile');
-      } finally {
-        setLoading(false);
-      }
-    };
+    } catch (err) {
+      setError(err.message || 'Unable to load profile');
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
+    setLoading(true);
     fetchProfile();
   }, []);
 
+  useEffect(() => {
+    setLoading(true);
+    fetchProfile();
+  }, [user]);
+
   if (loading) {
     return (
-      <div css={styles.page}>
-        <div css={styles.container}>Loading profile...</div>
-      </div>
+      <PageContainer>
+        Loading profile...
+      </PageContainer>
     );
   }
 
   if (error) {
     return (
-      <div css={styles.page}>
-        <div css={styles.container}>Error: {error}</div>
-      </div>
+      <PageContainer>
+        Error: {error}
+      </PageContainer>
     );
   }
 
   return (
-    <div css={styles.page}>
-      <div css={styles.container}>
-        <div css={styles.banner}>
-          <div css={styles.bannerOverlay} />
-
-          <div css={styles.profileSection}>
-            <img
-              css={styles.avatar}
+      <PageContainer>
+        <Banner>
+          <ProfileDetails>
+            <Avatar
               src={profile.avatar}
               alt={profile.username}
             />
-
             <div>
-              <div css={styles.username}>
+              <UsernameProfileHeader>
                 {profile.username}
-
                 {profile.online && (
-                  <FaCircle css={styles.online} />
+                  <FaCircle css={{ color: theme.colors.online, fontSize: '1rem' }} />
                 )}
-              </div>
-
-              <div css={styles.bio}>
+              </UsernameProfileHeader>
+              <UserBio>
                 {profile.bio}
-              </div>
+              </UserBio>
             </div>
-          </div>
-        </div>
-
-        <div css={styles.body}>
-          <aside css={styles.sidebar}>
-            <div css={styles.card}>
-              <div css={styles.cardTitle}>Player Stats</div>
-
-              <div css={styles.statRow}>
-                <span>Level</span>
-                <strong>{profile.level}</strong>
-              </div>
-
-              <div css={styles.statRow}>
-                <span>XP</span>
-                <strong>{profile.xp.toLocaleString()}</strong>
-              </div>
-
-              <div css={styles.statRow}>
-                <span>Matches</span>
-                <strong>{profile.matchesPlayed}</strong>
-              </div>
-
-              <div css={styles.statRow}>
-                <span>Win Rate</span>
-                <strong>{profile.winRate}%</strong>
-              </div>
-
-              <div css={styles.statRow}>
-                <span>Region</span>
-                <strong>{profile.region}</strong>
-              </div>
-            </div>
-
-            <div css={styles.card}>
-              <div css={styles.cardTitle}>Account</div>
-
-              <div css={styles.infoRow}>
-                <FaEnvelope color={theme.colors.accent} />
-                {profile.email}
-              </div>
-
-              <div css={styles.infoRow}>
-                <FaCalendarAlt color={theme.colors.accent} />
-                July 20, 2026
-              </div>
-
-              <div css={styles.infoRow}>
-                <FaStar color="#FFD166" />
-                Reputation {profile.reputation}
-              </div>
-
-              <div css={styles.infoRow}>
-                <FaGlobeAmericas color={theme.colors.accent} />
-                {profile.region}
-              </div>
-            </div>
-          </aside>
-
-          <main css={styles.content}>
-            <div css={styles.card}>
-              <div css={styles.cardTitle}>Favorite Games</div>
-
-              <div css={styles.chips}>
+          </ProfileDetails>
+        </Banner>
+        <ProfileBody>
+          <Sidebar>
+            <Card>
+              <CardTitle>
+                Player Stats
+                <DonutProgressBar 
+                  text={profile.levelInfo?.level || 0}
+                  progress={profile.levelInfo?.progression || 0}
+                  nextLevelAmount={profile.levelInfo?.nextLevelAmount || 100}
+                />
+              </CardTitle>
+              {userStats?.map((i) => {
+                return (
+                  <StatRow key={i?.id}>
+                    <span>{i?.title}</span>
+                    <strong>{i?.value}</strong>
+                  </StatRow>
+                )
+              })}
+            </Card>
+            <Card>
+              <CardTitle>Account</CardTitle>
+              {userAccountInfo?.map((i) => {
+                const Icon = i?.icon;
+                return (
+                  <InfoRow key={i?.id}>
+                    <Icon color={i?.color || theme.colors.accent} />
+                    {i?.title}
+                  </InfoRow>
+                )
+              })}
+            </Card>
+          </Sidebar>
+          <ProfileContent>
+            <Card>
+              <CardTitle>Favorite Games</CardTitle>
+              <ChipCard>
                 {profile.favoriteGames.map(game => (
-                  <div css={styles.chip} key={game}>
+                  <Chip key={game}>
                     {game}
-                  </div>
+                  </Chip>
                 ))}
-              </div>
-            </div>
-
-            <div css={styles.card}>
-              <div css={styles.cardTitle}>
+              </ChipCard>
+            </Card>
+            <Card>
+              <CardTitle>
                 Preferred Roles
-              </div>
-
-              <div css={styles.chips}>
+              </CardTitle>
+              <ChipCard>
                 {profile.preferredRoles.map(role => (
-                  <div css={styles.chip} key={role}>
+                  <Chip key={role}>
                     {role}
-                  </div>
+                  </Chip>
                 ))}
-              </div>
-            </div>
-
-            <div css={styles.card}>
-              <div css={styles.cardTitle}>
+              </ChipCard>
+            </Card>
+            <Card>
+              <CardTitle>
                 Achievements
-              </div>
-
-              <div css={styles.achievements}>
-                <div css={styles.achievement}>
-                  <FaTrophy
-                    size={42}
-                    color="#f4c542"
-                  />
-                  <div css={styles.achievementTitle}>
-                    Veteran
-                  </div>
-                </div>
-
-                <div css={styles.achievement}>
-                  <FaGamepad
-                    size={42}
-                    color="#60a5fa"
-                  />
-                  <div css={styles.achievementTitle}>
-                    700+ Matches
-                  </div>
-                </div>
-
-                <div css={styles.achievement}>
-                  <FaStar
-                    size={42}
-                    color="#ff8b3d"
-                  />
-                  <div css={styles.achievementTitle}>
-                    Top Rated
-                  </div>
-                </div>
-
-                <div css={styles.achievement}>
-                  <FaTrophy
-                    size={42}
-                    color="#9bdb6d"
-                  />
-                  <div css={styles.achievementTitle}>
-                    Team Player
-                  </div>
-                </div>
-              </div>
-            </div>
-          </main>
-        </div>
-      </div>
-    </div>
+              </CardTitle>
+              <AchievementCard>
+                {userAchievements?.map((i) => {
+                  const Icon = i?.icon;
+                  return (
+                    <Achievement key={i?.id}>
+                      <Icon size={42} color={i?.color} />
+                      <AchievementTitle>
+                        {i?.title}
+                      </AchievementTitle>
+                    </Achievement>
+                  ) 
+                })}
+              </AchievementCard>
+            </Card>
+          </ProfileContent>
+        </ProfileBody>
+      </PageContainer>
   );
 }

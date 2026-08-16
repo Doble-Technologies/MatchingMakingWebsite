@@ -146,7 +146,15 @@ export default function App() {
             element={<Profile />}
           />
           <Route
-            path="/profile/:username?"
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile/:username"
             element={<Profile />}
           />
           <Route
